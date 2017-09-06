@@ -29,15 +29,9 @@ def replace_default_kernel(kernel):
                       '/home/%s/.config/pyakm/01_pyakm' % usr,
                       '/etc/grub.d/01_pyakm'])
 
-    stdout, _ = req.communicate()
-    sys.stdout.write(stdout.decode('utf-8'))
-
     req = subp.Popen(['sudo', 'chmod',
                       '755',
                       '/etc/grub.d/01_pyakm'])
-
-    stdout, _ = req.communicate()
-    sys.stdout.write(stdout.decode('utf-8'))
 
     req = subp.Popen(['sudo', 'grub-mkconfig',
                       '-o',
@@ -52,8 +46,6 @@ def disable_default_kernel():
         req = subp.Popen(['sudo', 'chmod',
                           '644',
                           '/etc/grub.d/01_pyakm'])
-        stdout, _ = req.communicate()
-        sys.stdout.write(stdout.decode('utf-8'))
 
         req = subp.Popen(['sudo', 'grub-mkconfig',
                           '-o',
