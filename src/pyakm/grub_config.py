@@ -39,7 +39,7 @@ def replace_default_kernel(kernel):
                      stdout=subp.PIPE, stderr=subp.PIPE,
                      close_fds=True)
 
-    for line in iter(req.stdout.readline, b''):
+    for line in iter(req.stderr.readline, b''):
         sys.stdout.write(line.decode('utf-8'))
 
 def disable_default_kernel():
@@ -55,7 +55,7 @@ def disable_default_kernel():
                          stdout=subp.PIPE, stderr=subp.PIPE,
                          close_fds=True)
 
-        for line in iter(req.stdout.readline, b''):
+        for line in iter(req.stderr.readline, b''):
             sys.stdout.write(line.decode('utf-8'))
 
         
