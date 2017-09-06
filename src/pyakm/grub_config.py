@@ -53,7 +53,7 @@ def disable_default_kernel():
                           '-o',
                           '/boot/grub/grub.cfg'],
                          stdout=subp.PIPE, stderr=subp.PIPE,
-                         close_fds=True))
+                         close_fds=True)
 
         for line in iter(req.stdout.readline, b''):
             sys.stdout.write(line.decode('utf-8'))
