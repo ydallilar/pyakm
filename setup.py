@@ -11,5 +11,6 @@ setup(name='pyakm',
       package_dir={'pyakm': 'src/pyakm'},
       scripts=['scripts/pyakm-status', 'scripts/pyakm-install-latest',
                'scripts/pyakm-remove-kernel',
-               'scripts/pyakm-downgrade-kernel']
+               'scripts/pyakm-downgrade-kernel',
+               'scripts/pyakm-select-default']
      )
