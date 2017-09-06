@@ -15,4 +15,4 @@ kernel_list = grab_kernel_official()
 print('Kernel %s will default in grub --> \n' % kernel_name)
 
 
-replace_grub_str(kernel_list[kernel_id])
+replace_default_kernel(kernel_list[kernel_id])
