@@ -1,0 +1,9 @@
+#!/usr/bin/python
+
+from pyakm.kernel_module import *
+
+kernel_list = grab_kernel_official()
+kernel = kernel_list[2]
+packages = grab_package_list(kernel)
+install_kernel(kernel, packages, 1)
+install_latest_kernel(kernel, packages)

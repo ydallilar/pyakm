@@ -1,0 +1,7 @@
+#!/usr/bin/python
+
+from pyakm.kernel_module import *
+
+kernel_list = grab_kernel_official()
+for kernel in kernel_list:
+    kernel.print_kernel_info()
