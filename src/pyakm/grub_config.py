@@ -18,7 +18,7 @@ def replace_grub_str(f_str, kernel):
 def replace_default_kernel(kernel):
 
     f_str = read_template()
-    f_str = replace_grub_str(f_str, kernel.name)
+    f_str = replace_grub_str(f_str, kernel)
 
     print(f_str)
     
