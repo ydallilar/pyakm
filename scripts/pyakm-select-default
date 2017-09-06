@@ -4,15 +4,25 @@ from pyakm.kernel_module import *
 from pyakm.grub_config import *
 import sys
 
-if not (len(sys.argv) == 2):
-    print('Usage: pyakm-select-default [kernel]')
+if (len(sys.argv) < 2):
+    print('Usage: pyakm-select-default [opts] [kernel]')
+    print('   -d  disable pyakm default kernel')
+    print('   -k  [kernel]  to select default kernel')
     exit(1)
 
-kernel_name = sys.argv[1]
-kernel_id = kernel_dicts[kernel_name]
+if sys.argv[1] == '-d':
+   print('Disabling pyakm default kernel')
+   disable_default_kernel()
+
+else:
+
+   kernel_name = sys.argv[2]
+   kernel_id = kernel_dicts[kernel_name]
     
-kernel_list = grab_kernel_official()
-print('Kernel %s will default in grub --> \n' % kernel_name)
+   kernel_list = grab_kernel_official()
+   print('Kernel %s will default in grub --> \n' % kernel_name)
 
-
-replace_default_kernel(kernel_list[kernel_id])
+   if kernel_list[kernel_id].installed:
+      replace_default_kernel(kernel_list[kernel_id])
+   else:
+      print('%s is not installed. Install the kernel first' % kernel_name)

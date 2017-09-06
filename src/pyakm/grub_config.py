@@ -20,7 +20,47 @@ def replace_default_kernel(kernel):
     f_str = read_template()
     f_str = replace_grub_str(f_str, kernel)
 
-    print(f_str)
-    
-    
-    
+    usr = os.popen('id -u -n').read([:-1])
+    f = open('/home/%s/.config/pyakm/01_pyakm' % usr, 'w')
+    f.write(f_str)
+    f.close()
+
+    req = subp.Popen(['sudo', 'cp',
+                      '/home/%s/.config/pyakm/01_pyakm' % usr,
+                      '/etc/grub.d/01_pyakm'])
+
+    stdout, _ = req.communicate()
+    sys.stdout.write(stdout)
+
+    req = subp.Popen(['sudo', 'chmod',
+                      '755',
+                      '/etc/grub.d/01_pyakm'])
+
+    stdout, _ = req.communicate()
+    sys.stdout.write(stdout)
+
+    req = subp.Popen(['sudo', 'grub-mkconfig',
+                      '-o',
+                      '/boot/grub/grub.cfg'])
+
+    for line in iter(req.stdout.readline, b''):
+        sys.stdout.write(line.decode('utf-8'))
+
+def disable_default_kernel():
+
+    if os.path.file('/etc/grub.d/01_pyakm'):
+        req = subp.Popen(['sudo', 'chmod',
+                          '644',
+                          '/etc/grub.d/01_pyakm'])
+        stdout, _ = req.communicate()
+        sys.stdout.write(stdout)
+
+        req = subp.Popen(['sudo', 'grub-mkconfig',
+                          '-o',
+                          '/boot/grub/grub.cfg'])
+
+        for line in iter(req.stdout.readline, b''):
+            sys.stdout.write(line.decode('utf-8'))
+
+        
+
