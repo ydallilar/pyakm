@@ -20,7 +20,7 @@ def replace_default_kernel(kernel):
     f_str = read_template()
     f_str = replace_grub_str(f_str, kernel)
 
-    usr = os.popen('id -u -n').read([:-1])
+    usr = os.popen('id -u -n').read()[:-1]
     f = open('/home/%s/.config/pyakm/01_pyakm' % usr, 'w')
     f.write(f_str)
     f.close()
