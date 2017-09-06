@@ -11,7 +11,7 @@ def read_template():
 
 def replace_grub_str(f_str, kernel):
 
-    f_str.replace('linux-template', kernel.name)
+    f_str = f_str.replace('linux-template', kernel.name)
     
     return f_str
 
