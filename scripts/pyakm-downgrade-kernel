@@ -1,0 +1,26 @@
+#!/usr/bin/python
+
+from pyakm.kernel_module import *
+import sys
+
+if not (len(sys.argv) == 2):
+    print('Usage: pyakm-downgrade-kernel [kernel]')
+    exit(1)
+
+kernel_name = sys.argv[1]
+kernel_id = kernel_dicts[kernel_name]
+    
+kernel_list = grab_kernel_official()
+print('Current status of %s --> \n' % kernel_name)
+
+packages = grab_package_list(kernel_list[kernel_id])
+
+print('Available %s version to downgrade:', kernel_name)
+
+for i in range(40):
+
+    print('%02d) %s' % (i, packages[i]))
+
+sel = input('Your Selection :')
+
+install_kernel(kernel_list[kernel_id], packages, int(sel))

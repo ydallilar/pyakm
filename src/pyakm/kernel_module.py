@@ -150,3 +150,12 @@ def install_latest_kernel(kernel, package_list):
 
     install_kernel(kernel, package_list, 0)
     
+def remove_kernel(kernel):
+
+    req = subp.Popen(['sudo', '/usr/bin/pacman', '-R',
+                      '%s' % kernel.name, '--noconfirm'],
+                    stdout=subp.PIPE, stderr=subp.PIPE,
+                     close_fds=True)
+   
+    for line in iter(req.stdout.readline, b''):
+        sys.stdout.write(line.decode('utf-8'))
