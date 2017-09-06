@@ -35,7 +35,9 @@ def replace_default_kernel(kernel):
 
     req = subp.Popen(['sudo', 'grub-mkconfig',
                       '-o',
-                      '/boot/grub/grub.cfg'])
+                      '/boot/grub/grub.cfg'],
+                     stdout=subp.PIPE, stderr=subp.PIPE,
+                     close_fds=True)
 
     for line in iter(req.stdout.readline, b''):
         sys.stdout.write(line.decode('utf-8'))
@@ -49,7 +51,9 @@ def disable_default_kernel():
 
         req = subp.Popen(['sudo', 'grub-mkconfig',
                           '-o',
-                          '/boot/grub/grub.cfg'])
+                          '/boot/grub/grub.cfg'],
+                         stdout=subp.PIPE, stderr=subp.PIPE,
+                         close_fds=True))
 
         for line in iter(req.stdout.readline, b''):
             sys.stdout.write(line.decode('utf-8'))
