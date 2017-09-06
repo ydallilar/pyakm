@@ -16,3 +16,8 @@ pyakm-remove-kernel [kernel]
 pyakm-downgrade-kernel [kernel]
 - Downgrade specified kernel. Asks for possible options
 
+pyakm-select-default -k [kernel]
+- To switch default kernel. Simply adds first grub entry as pyakm default ([kernel])
+
+To disable this feature (go back to antergos defaults)
+- pyakm-select-default -d
