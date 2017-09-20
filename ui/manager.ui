@@ -48,7 +48,7 @@
             <property name="spacing">20</property>
             <property name="layout_style">spread</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="install_button">
                 <property name="label" translatable="yes">Install</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

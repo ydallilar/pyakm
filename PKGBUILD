@@ -28,4 +28,5 @@ package() {
 
  python setup.py install --root="$pkgdir/" --optimize=1
  install -D -m644 data/grub/01_pyakm_template "$pkgdir"/usr/share/pyakm/data/grub/01_pyakm_template 
+ install -D -m644 ui/ "$pkgdir"/usr/share/pyakm/ui/manager.ui 
 }

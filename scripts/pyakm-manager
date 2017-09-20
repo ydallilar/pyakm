@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from pyakm.kernel_module import *
+import sys, re
+
+        
+builder = Gtk.Builder()
+builder.add_from_file("/usr/share/pyakm/ui/manager.ui")
+builder.connect_signals(Handler())
+
+window = builder.get_object("window1")
+treeview = builder.get_object("treeview")
+win.connect("delete-event", Gtk.main_quit)
+window.show_all()
+
+kernel_name = 'linux'
+kernel_id = kernel_dicts[kernel_name]
+    
+kernel_list = grab_kernel_official()
+
+packages = grab_package_list(kernel_list[kernel_id])
+
+liststore = Gtk.ListStore(str,str,str)
+
+
+krnl_vers = []
+vers = ''
+
+for i,pkg in enumerate(packages):
+    res = re.match("linux-(\w+.\w+).(\w+-\w+)-x", pkg)
+    if res != None:
+        if vers != res.group(1):
+            print ('Linux', str(res.group(1)), str(res.group(2)))
+            liststore.append(list(('Linux', str(res.group(1)), \
+                                   str(res.group(2)))))
+        vers = res.group(1)
+        rev = res.group(2)
+
+renderer = Gtk.CellRendererText()
+column = Gtk.TreeViewColumn("Kernel", renderer, text=0)
+treeview.append_column(column)
+renderer = Gtk.CellRendererText()
+column = Gtk.TreeViewColumn("Version", renderer, text=1)
+treeview.append_column(column)
+renderer = Gtk.CellRendererText()
+column = Gtk.TreeViewColumn("Revision", renderer, text=2)
+treeview.append_column(column)
+
+treeview.set_model(liststore)
+              
+print (krnl_vers)
+Gtk.main()
