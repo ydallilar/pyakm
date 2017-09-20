@@ -3,7 +3,7 @@ import subprocess as subp
 
 def read_template():
 
-    f = open('/usr/share/pyakm/grub_config/01_pyakm_template')
+    f = open('/usr/share/pyakm/data/grub/01_pyakm_template')
     f_str = f.read()
     f.close()
 

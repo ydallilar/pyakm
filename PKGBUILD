@@ -27,5 +27,5 @@ package() {
  cd "$_gitname"
 
  python setup.py install --root="$pkgdir/" --optimize=1
- install -D -m644 grub_config/01_pyakm_template "$pkgdir"/usr/share/pyakm/grub_config/01_pyakm_template 
+ install -D -m644 data/grub/01_pyakm_template "$pkgdir"/usr/share/pyakm/data/grub/01_pyakm_template 
 }
