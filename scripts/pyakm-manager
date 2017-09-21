@@ -17,7 +17,7 @@ class MainApp:
 
         self.kernels = ['linux', 'linux-lts', 'linux-zen']
         
-        self.kernel_name = kernels[0]
+        self.kernel_name = self.kernels[0]
         
         self.treeview = create_treeview1(self.builder)
 
