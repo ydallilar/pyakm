@@ -24,7 +24,9 @@ class MainApp:
         self.treeview = create_treeview1(self.builder)
         self.liststore = Gtk.ListStore(str, str, str)
         self.treeview.set_model(self.liststore)
-        
+
+        self.loading = self.builder.get_object("loading")
+
         self.updateListstoreThr()
 
         self.select = self.treeview.get_selection()
@@ -33,7 +35,6 @@ class MainApp:
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
 
-        self.loading = self.builder.get_object("loading")
 
     def updateListstore(self):
 
