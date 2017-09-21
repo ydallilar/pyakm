@@ -46,26 +46,44 @@ def sort_and_filter_packages(kernel_name, packages):
 
     pkg_vers = pkg_vers[::-1]
     packages = tmp_packages[::-1]
-        
-    #print (pkg_vers)
-    #print (packages)
-    #print (tmp_packages)
-
-    for i in range(len(packages)):
-        print (packages[i], pkg_vers[i])
-        
-    
+            
     new_packages = []
     last_vers = ""
                     
     for i in range(len(packages)):
         vers = str(pkg_vers[i])[:4]
-        print ("A", vers, last_vers)
         if last_vers != vers:
-            print ("B", vers, last_vers)
             new_packages.append(packages[i])
             last_vers = vers
 
     return new_packages
             
     
+def create_treeview1():
+
+    liststore = Gtk.ListStore(str,str,str)
+
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn("Kernel", renderer, text=0)
+    treeview.append_column(column)
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn("Version", renderer, text=1)
+    treeview.append_column(column)
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn("Revision", renderer, text=2)
+    treeview.append_column(column)
+    treeview.set_model(liststore)
+
+    return liststore
+
+def populate_list_store_from_packages(liststore, packages, kernel_name):
+
+    for i,pkg in enumerate(packages):
+    res = re.match(kernel_name+"-(\w+.\w+).(\w+-\w+)-x", pkg)
+    if res != None:
+        if vers != res.group(1):
+            print (kernel_name, str(res.group(1)), str(res.group(2)))
+            liststore.append(list(('Linux', str(res.group(1)), \
+                                   str(res.group(2)))))
+    return liststore
+            

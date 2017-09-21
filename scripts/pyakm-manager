@@ -23,7 +23,8 @@ liststore = Gtk.ListStore(str,str,str)
 packages = grab_kernel_packages_by_name(kernel_name)
 packages = sort_and_filter_packages(kernel_name, packages)
 
-print (packages)
+liststore = create_treeview1()
+populate_list_store_from_packages(liststore, packages, kernel_name)
 
 """
 krnl_vers = []
