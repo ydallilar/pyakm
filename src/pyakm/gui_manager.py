@@ -41,7 +41,7 @@ def sort_and_filter_packages(kernel_name, packages):
 
     tmp_packages = []
     for i in range(len(sorted_ndx)):
-        tmp_packages.append(packages[sorted_ndx])
+        tmp_packages.append(packages[sorted_ndx[i]])
     packages = tmp_packages
         
     print (pkg_vers)
@@ -49,7 +49,7 @@ def sort_and_filter_packages(kernel_name, packages):
     new_packages = []
     last_vers = ""
                     
-    for i in len(packages):
+    for i in range(len(packages)):
         vers = str(pkg_vers[i])[:4]
         if last_ver != vers:
             new_package.append(packages[i])
