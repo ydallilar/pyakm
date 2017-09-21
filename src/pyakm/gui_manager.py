@@ -36,9 +36,9 @@ def sort_and_filter_packages(kernel_name, packages):
     pkg_vers.sort()
     pkg_vers = pkg_vers[::-1]
 
-    tmp_packages = []
+    tmp_packages = [None]*len(sorted_ndx)
     for i in range(len(sorted_ndx)):
-        tmp_packages.append(packages[sorted_ndx[i]])
+        tmp_packages[sorted_ndx[i]] = packages[i]
         print(tmp_packages[i], pkg_vers[i], sorted_ndx[i], i)
     packages = tmp_packages
         
