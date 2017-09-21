@@ -35,10 +35,10 @@ class MainApp:
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
 
-        #self.popoverMenu = self.builder.get_object("popover_menu")
+        self.popoverMenu = self.builder.get_object("popover_menu")
 
-        #self.menuButton = self.builder.get_object("menu_button")
-        #self.menuButton.connect("toggled", self.onClickPopover)
+        self.menuButton = self.builder.get_object("menu_button")
+        self.menuButton.connect("toggled", self.onClickPopover)
 
     def updateListstore(self):
 
