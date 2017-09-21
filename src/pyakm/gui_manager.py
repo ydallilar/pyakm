@@ -59,10 +59,9 @@ def sort_and_filter_packages(kernel_name, packages):
     return new_packages
             
     
-def create_treeview1():
+def create_treeview1(builder):
 
-    liststore = Gtk.ListStore(str,str,str)
-
+    treeview = builder.get_object("treeview")
     renderer = Gtk.CellRendererText()
     column = Gtk.TreeViewColumn("Kernel", renderer, text=0)
     treeview.append_column(column)
@@ -72,11 +71,12 @@ def create_treeview1():
     renderer = Gtk.CellRendererText()
     column = Gtk.TreeViewColumn("Revision", renderer, text=2)
     treeview.append_column(column)
-    treeview.set_model(liststore)
 
-    return liststore
+    return treeview
 
-def populate_list_store_from_packages(liststore, packages, kernel_name):
+def populate_list_store_from_packages(packages, kernel_name):
+
+    liststore = Gtk.ListStore(str,str,str)
 
     for i,pkg in enumerate(packages):
         res = re.match(kernel_name+"-(\w+.\w+).(\w+-\w+)-x", pkg)

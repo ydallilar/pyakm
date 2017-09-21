@@ -12,19 +12,17 @@ builder = Gtk.Builder()
 builder.add_from_file("/usr/share/pyakm/ui/manager.ui")
 
 window = builder.get_object("window1")
-treeview = builder.get_object("treeview")
 window.connect("delete-event", Gtk.main_quit)
 window.show_all()
 
 kernel_name = sys.argv[1]
 
-liststore = Gtk.ListStore(str,str,str)
-
 packages = grab_kernel_packages_by_name(kernel_name)
 packages = sort_and_filter_packages(kernel_name, packages)
 
-liststore = create_treeview1()
-populate_list_store_from_packages(liststore, packages, kernel_name)
+treeview = create_treeview1()
+liststore = populate_list_store_from_packages(packages, kernel_name)
+treeview.set_model(liststore)
 
 """
 krnl_vers = []
