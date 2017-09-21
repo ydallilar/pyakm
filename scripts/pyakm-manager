@@ -21,7 +21,7 @@ kernel_name = sys.argv[1]
 liststore = Gtk.ListStore(str,str,str)
 
 packages = grab_kernel_packages_by_name(kernel_name)
-packages = sort_filter_packages(kernel_name, packages)
+packages = sort_and_filter_packages(kernel_name, packages)
 
 print (packages)
 
