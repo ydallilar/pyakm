@@ -41,7 +41,7 @@ class MainApp:
 
     def updateListstoreThr(self):
         
-        thread = threading.Thread(target=self.updateListStore)
+        thread = threading.Thread(target=self.updateListstore)
         thread.daemon = True
         thread.start()
         
