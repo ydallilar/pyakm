@@ -55,7 +55,9 @@ def sort_and_filter_packages(kernel_name, packages):
                     
     for i in range(len(packages)):
         vers = str(pkg_vers[i])[:4]
+        print ("A", vers, last_vers)
         if last_vers != vers:
+            print ("B", vers, last_vers)
             new_packages.append(packages[i])
             last_vers = vers
 
