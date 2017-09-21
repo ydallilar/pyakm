@@ -27,9 +27,9 @@ def sort_and_filter_packages(kernel_name, packages):
     for i,pkg in enumerate(packages):
         res = re.match(kernel_name+"-(\w+).(\w+).(\w+)-(\w+)-x", pkg)
         if res != None:
-            pkg_vers.append(int("%02d%02d%02d%02d" % \
-                                (int(res.group(1)),int(res.group(2)),
-                                 int(res.group(3)),int(res.group(4)))))
+            pkg_vers.append("%02d%02d%02d%02d" % \
+                            (int(res.group(1)),int(res.group(2)),
+                             int(res.group(3)),int(res.group(4))))
 
     
     sorted_ndx = _argsort(pkg_vers)
