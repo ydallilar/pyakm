@@ -35,6 +35,7 @@ def sort_and_filter_packages(kernel_name, packages):
     print (pkg_vers)
     
     sorted_ndx = _argsort(pkg_vers)[::-1]
+    print (sorted_ndx)
     pkg_vers.sort()
     pkg_vers = pkg_vers[::-1]
 
