@@ -79,11 +79,11 @@ def create_treeview1():
 def populate_list_store_from_packages(liststore, packages, kernel_name):
 
     for i,pkg in enumerate(packages):
-    res = re.match(kernel_name+"-(\w+.\w+).(\w+-\w+)-x", pkg)
-    if res != None:
-        if vers != res.group(1):
-            print (kernel_name, str(res.group(1)), str(res.group(2)))
-            liststore.append(list(('Linux', str(res.group(1)), \
-                                   str(res.group(2)))))
+        res = re.match(kernel_name+"-(\w+.\w+).(\w+-\w+)-x", pkg)
+        if res != None:
+            if vers != res.group(1):
+                print (kernel_name, str(res.group(1)), str(res.group(2)))
+                liststore.append(list(('Linux', str(res.group(1)), \
+                                       str(res.group(2)))))
     return liststore
             
