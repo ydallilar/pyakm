@@ -50,7 +50,8 @@ def sort_and_filter_packages(kernel_name, packages):
             
     new_packages = []
     last_vers = ""
-                    
+
+    """
     for i in range(len(packages)):
         vers = str(pkg_vers[i])[:4]
         if last_vers != vers:
@@ -58,7 +59,8 @@ def sort_and_filter_packages(kernel_name, packages):
             last_vers = vers
 
     return new_packages
-            
+    """
+    return packages
     
 def create_treeview1(builder):
 
