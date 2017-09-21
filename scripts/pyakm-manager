@@ -32,14 +32,17 @@ class MainApp:
 
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
-      
+
+        self.loading = self.builder.get_object("loading")
 
     def updateListstore(self):
 
+        self.loading.start()
         self.packages = grab_kernel_packages_by_name(self.kernel_name)
         self.packages = sort_and_filter_packages(self.kernel_name, self.packages)
         self.liststore = populate_list_store_from_packages(self.packages, self.kernel_name)
         self.treeview.set_model(self.liststore)
+        self.loading.stop()
 
     def updateListstoreThr(self):
         
