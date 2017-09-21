@@ -35,10 +35,6 @@ class MainApp:
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
 
-        self.popoverMenu = self.builder.get_object("popover_menu")
-
-        self.menuButton = self.builder.get_object("menu_button")
-        #self.menuButton.connect("toggled", self.onClickPopover)
 
     def updateListstore(self):
 
@@ -61,14 +57,6 @@ class MainApp:
     def onClickRefreshButton(self, button):
         self.kernel_name = self.kernels[2]
         self.updateListstoreThr()
-
-    """
-    def onClickPopover(self, button):
-        if self.popoverMenu.get_visible():
-            popoverMenu.hide()
-        else:
-            popoverMenu.show_all()
-    """
     
     def onTreeSelectionChanged(self, selection):
         model, treeiter = selection.get_selected()
