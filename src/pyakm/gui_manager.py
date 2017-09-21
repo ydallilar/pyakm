@@ -32,7 +32,7 @@ def sort_and_filter_packages(kernel_name, packages):
                                  int(res.group(3)),int(res.group(4)))))
 
     sorted_ndx = _argsort(pkg_vers)[::-1]
-    pkg_vers = sort(pkg_vers)[::-1]
+    pkg_vers = pkg_vers.sort()[::-1]
 
     tmp_packages = []
     for i in len(sorted_ndx):
