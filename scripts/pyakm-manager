@@ -7,6 +7,11 @@ from pyakm.kernel_module import *
 from pyakm.gui_manager import *
 import sys, re
 
+def on_tree_selection_changed(selection):
+    model, treeiter = selection.get_selected()
+    if treeiter != None:
+        print("You selected", model[treeiter][0])
+
         
 builder = Gtk.Builder()
 builder.add_from_file("/usr/share/pyakm/ui/manager.ui")
@@ -25,7 +30,7 @@ liststore = populate_list_store_from_packages(packages, kernel_name)
 treeview.set_model(liststore)
 
 select = treeview.get_selection()
-select.connect("changed", Handler.on_tree_selection_changed)
+select.connect("changed", on_tree_selection_changed)
 
 """
 krnl_vers = []
