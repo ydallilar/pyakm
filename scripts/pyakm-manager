@@ -4,6 +4,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from pyakm.kernel_module import *
+from pyakm.gui_manager import *
 import sys, re
 
         
@@ -15,19 +16,18 @@ treeview = builder.get_object("treeview")
 window.connect("delete-event", Gtk.main_quit)
 window.show_all()
 
-kernel_name = 'linux'
-kernel_id = kernel_dicts[kernel_name]
-    
-kernel_list = grab_kernel_official()
-
-packages = grab_package_list(kernel_list[kernel_id])
+kernel_name = sys.argv[1]
 
 liststore = Gtk.ListStore(str,str,str)
 
+packages = grab_kernel_packages_by_name(kernel_name)
+packages = sort_filter_packages(kernel_name, packages)
 
+print (packages)
+
+"""
 krnl_vers = []
 vers = ''
-
 for i,pkg in enumerate(packages):
     res = re.match("linux-(\w+.\w+).(\w+-\w+)-x", pkg)
     if res != None:
@@ -47,8 +47,7 @@ treeview.append_column(column)
 renderer = Gtk.CellRendererText()
 column = Gtk.TreeViewColumn("Revision", renderer, text=2)
 treeview.append_column(column)
-
-treeview.set_model(liststore)
-              
+treeview.set_model(liststore)           
 print (krnl_vers)
+"""
 Gtk.main()
