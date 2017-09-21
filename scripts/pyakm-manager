@@ -7,6 +7,8 @@ from pyakm.kernel_module import *
 from pyakm.gui_manager import *
 import sys, re
 
+import threading
+
 class MainApp:
 
     def __init__(self):
@@ -26,8 +28,12 @@ class MainApp:
 
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
+
         
-        self.updateListstore()
+        thread = threading.Thread(target=self.updateListStore)
+        thread.daemon = True
+        thread.start()
+        #self.updateListstore()
         
     def updateListstore(self):
 
