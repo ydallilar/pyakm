@@ -6,7 +6,7 @@ import re
 
 class Handler:
 
-    def on_tree_selection_changed(self, selection):
+    def on_tree_selection_changed(selection):
         model, treeiter = selection.get_selected()
         if treeiter != None:
             print("You selected", model[treeiter][0])
