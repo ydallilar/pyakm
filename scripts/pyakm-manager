@@ -47,7 +47,7 @@ class MainApp:
         thread.daemon = True
         thread.start()
 
-        liststore = Gtk.ListStore(str,str,str)
+        self.liststore = Gtk.ListStore(str,str,str)
         self.treeview.set_model(self.liststore)
 
     def onClickRefreshButton(self, button):
