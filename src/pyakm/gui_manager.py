@@ -9,7 +9,8 @@ class Handler:
     def on_tree_selection_changed(selection):
         model, treeiter = selection.get_selected()
         if treeiter != None:
-            print("You selected", model[treeiter][0])
+            print("You selected", model[treeiter][0],
+                  model[treeiter][1], model[treeiter][2])
 
 def _argsort(arr):
     return sorted(range(len(arr)), key=arr.__getitem__)
