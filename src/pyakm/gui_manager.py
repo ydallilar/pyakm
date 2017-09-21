@@ -42,8 +42,12 @@ def sort_and_filter_packages(kernel_name, packages):
     packages = tmp_packages
         
     #print (pkg_vers)
-    print (packages)
+    #print (packages)
     #print (tmp_packages)
+
+    for i in range(len(packages)):
+        print (packages[i], pkg_vers[i])
+        
     
     new_packages = []
     last_vers = ""
