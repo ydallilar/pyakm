@@ -38,7 +38,7 @@ class MainApp:
         self.popoverMenu = self.builder.get_object("popover_menu")
 
         self.menuButton = self.builder.get_object("menu_button")
-        self.menuButton.connect("toggled", self.onClickPopover)
+        #self.menuButton.connect("toggled", self.onClickPopover)
 
     def updateListstore(self):
 
@@ -62,12 +62,14 @@ class MainApp:
         self.kernel_name = self.kernels[2]
         self.updateListstoreThr()
 
+    """
     def onClickPopover(self, button):
         if self.popoverMenu.get_visible():
             popoverMenu.hide()
         else:
             popoverMenu.show_all()
-        
+    """
+    
     def onTreeSelectionChanged(self, selection):
         model, treeiter = selection.get_selected()
         if treeiter != None:
