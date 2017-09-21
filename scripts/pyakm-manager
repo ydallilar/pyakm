@@ -25,7 +25,7 @@ class MainApp:
         self.liststore = Gtk.ListStore(str, str, str)
         self.treeview.set_model(self.liststore)
         
-        updateListstoreThr()
+        self.updateListstoreThr()
 
         self.select = self.treeview.get_selection()
         self.select.connect("changed", self.onTreeSelectionChanged)
@@ -34,7 +34,7 @@ class MainApp:
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
       
 
-def updateListstore(self):
+    def updateListstore(self):
 
         self.packages = grab_kernel_packages_by_name(self.kernel_name)
         self.packages = sort_and_filter_packages(self.kernel_name, self.packages)
