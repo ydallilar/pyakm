@@ -43,6 +43,7 @@ def sort_and_filter_packages(kernel_name, packages):
         
     print (pkg_vers)
     print (packages)
+    print (tmp_packages)
     
     new_packages = []
     last_vers = ""
