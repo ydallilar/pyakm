@@ -45,10 +45,13 @@ class MainApp:
         thread = threading.Thread(target=self.updateListstore)
         thread.daemon = True
         thread.start()
-        
+
+        liststore = Gtk.ListStore(str,str,str)
+        self.treeview.set_model(self.liststore)
+
     def onClickRefreshButton(self, button):
-        self.kernel_name = self.kernels[1]
-        self.updateListstore()
+        self.kernel_name = self.kernels[2]
+        self.updateListstoreThr()
         
     def onTreeSelectionChanged(self, selection):
         model, treeiter = selection.get_selected()
