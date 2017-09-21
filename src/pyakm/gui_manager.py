@@ -4,6 +4,13 @@ from gi.repository import Gtk
 import pyakm.kernel_module as kernel_module
 import re
 
+class Handler:
+
+    def on_tree_selection_changed(self, selection):
+        model, treeiter = selection.get_selected()
+        if treeiter != None:
+        print("You selected", model[treeiter][0])
+
 def _argsort(arr):
     return sorted(range(len(arr)), key=arr.__getitem__)
     

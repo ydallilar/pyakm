@@ -24,6 +24,9 @@ treeview = create_treeview1(builder)
 liststore = populate_list_store_from_packages(packages, kernel_name)
 treeview.set_model(liststore)
 
+select = treeview.get_selection()
+select.connect("changed", Handler.on_tree_selection_changed)
+
 """
 krnl_vers = []
 vers = ''
