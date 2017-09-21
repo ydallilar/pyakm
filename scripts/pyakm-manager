@@ -9,7 +9,7 @@ import sys, re
         
 builder = Gtk.Builder()
 builder.add_from_file("/usr/share/pyakm/ui/manager.ui")
-builder.connect_signal(Handler())
+builder.connect_signals(Handler())
 
 window = builder.get_object("window1")
 window.connect("delete-event", Gtk.main_quit)
