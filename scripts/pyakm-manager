@@ -17,15 +17,15 @@ class MainApp:
 
         self.kernel_name = sys.argv[1]
         
-        self.packages = grab_kernel_packages_by_name(kernel_name)
-        self.packages = sort_and_filter_packages(kernel_name, packages)
+        self.packages = grab_kernel_packages_by_name(self.kernel_name)
+        self.packages = sort_and_filter_packages(self.kernel_name, self.packages)
 
-        self.treeview = create_treeview1(builder)
-        self.liststore = populate_list_store_from_packages(packages, kernel_name)
-        self.treeview.set_model(liststore)
+        self.treeview = create_treeview1(self.builder)
+        self.liststore = populate_list_store_from_packages(self.packages, self.kernel_name)
+        self.treeview.set_model(self.liststore)
 
-        self.select = treeview.get_selection()
-        self.select.connect("changed", Handler.on_tree_selection_changed)
+        self.select = self.treeview.get_selection()
+        self.select.connect("changed", on_tree_selection_changed)
         
         
     def on_tree_selection_changed(self,selection):
