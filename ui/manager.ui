@@ -211,7 +211,6 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">False</property>
-                <property name="active">True</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -242,15 +241,15 @@
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">0</property>
         <property name="show_close_button">True</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
         <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="menu_button">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -260,6 +259,10 @@
               <placeholder/>
             </child>
           </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>
