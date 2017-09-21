@@ -27,9 +27,9 @@ class MainApp:
         self.refreshButton = self.builder.get_object("refresh_button")
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
         
-        updateListstore()
+        self.updateListstore()
         
-    def updateListstore():
+    def updateListstore(self):
 
         self.packages = grab_kernel_packages_by_name(self.kernel_name)
         self.packages = sort_and_filter_packages(self.kernel_name, self.packages)
@@ -39,7 +39,7 @@ class MainApp:
         
     def onClickRefreshButton(self, button):
         self.kernel_name = self.kernels[1]
-        updateListstore()
+        self.updateListstore()
         
     def onTreeSelectionChanged(self, selection):
         model, treeiter = selection.get_selected()
