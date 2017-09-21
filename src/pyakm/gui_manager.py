@@ -81,7 +81,8 @@ def populate_list_store_from_packages(packages, kernel_name):
     for i,pkg in enumerate(packages):
         res = re.match(kernel_name+"-(\w+.\w+).(\w+-\w+)-x", pkg)
         print (kernel_name, str(res.group(1)), str(res.group(2)))
-        liststore.append(list(('Linux', str(res.group(1)), \
+        liststore.append(list((kernel_name, str(res.group(1)), \
                                str(res.group(2)))))
+
     return liststore
             
