@@ -30,9 +30,6 @@ class MainApp:
         self.refreshButton.connect("clicked", self.onClickRefreshButton)
 
         
-        thread = threading.Thread(target=self.updateListStore)
-        thread.daemon = True
-        thread.start()
         #self.updateListstore()
         
     def updateListstore(self):
@@ -42,6 +39,11 @@ class MainApp:
         self.liststore = populate_list_store_from_packages(self.packages, self.kernel_name)
         self.treeview.set_model(self.liststore)
 
+    def updateListstoreThr(self):
+        
+        thread = threading.Thread(target=self.updateListStore)
+        thread.daemon = True
+        thread.start()
         
     def onClickRefreshButton(self, button):
         self.kernel_name = self.kernels[1]
@@ -56,4 +58,5 @@ class MainApp:
 app = MainApp()
 app.window.connect("delete-event", Gtk.main_quit)
 app.window.show_all()
+app.updateListstoreThr()
 Gtk.main()
