@@ -192,7 +192,7 @@ class OfficialKernel:
             if not os.path.isfile(handle.lockfile):
                 break
             if info_func is not None: info_func('Waiting for other package manager to quit...')
-            sleep(2)
+            time.sleep(2)
 
         trans.prepare()
         trans.commit()
