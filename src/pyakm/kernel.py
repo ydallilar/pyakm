@@ -181,13 +181,6 @@ class OfficialKernel:
                 handle.progresscb = self._progcb
                 info_func('Upgrading, %s' % (self.header_name))
         
-        trans = handle.init_transaction()
-
-        if opt:
-            trans.add_pkg(self.repo)
-        else:
-            trans.add_pkg(self.getRepoHeader())
-
         sys.stdout.write('Test1\n')
 
         while(True):
@@ -197,6 +190,13 @@ class OfficialKernel:
             time.sleep(2)
 
         sys.stdout.write('Test2\n')
+
+        trans = handle.init_transaction()
+
+        if opt:
+            trans.add_pkg(self.repo)
+        else:
+            trans.add_pkg(self.getRepoHeader())
 
         trans.prepare()
         trans.commit()
