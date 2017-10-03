@@ -1,6 +1,6 @@
 #  Copyright © 2017 Yigit Dallilar <yigit.dallilar@gmail.com>
 #
-#  kernel.py is a part of pyakm. 
+#  polkit.py is a part of pyakm. 
 #
 #  pyakm is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
