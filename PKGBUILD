@@ -30,6 +30,7 @@ package() {
  install -D -m644 data/grub/01_pyakm_template "$pkgdir"/usr/share/pyakm/data/grub/01_pyakm_template 
  install -D -m644 data/ui/manager.ui "$pkgdir"/usr/share/pyakm/ui/manager.ui 
  install -D -m644 data/dbus/com.github.pyakm.system.conf "$pkgdir"/etc/dbus-1/system.d/com.github.pyakm.system.conf
+ install -D -m644 data/dbus/com.github.pyakm.system.service "$pkgdir"/usr/share/dbus-1/system-services/com.github.pyakm.system.service
  install -D -m644 data/polkit/com.github.pyakm.policy "$pkgdir"/usr/share/polkit-1/actions/com.github.pyakm.policy
  install -D -m644 data/systemd/pyakm-system.service "$pkgdir"/usr/lib/systemd/system/pyakm-system.service
 }
