@@ -23,11 +23,11 @@
 
 from pyakm.kernel import OfficialKernel as k
 from pyakm.polkit import PolkitAgent
+import pyakm.grub as grub
 
 import dbus, threading
 import dbus.service
 import os, time
-import grub
 
 class Server(dbus.service.Object):
  
