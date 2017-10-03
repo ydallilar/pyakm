@@ -23,7 +23,7 @@
 
 import pyalpm as alpm
 from pycman import config
-import json, requests, re, os, functools, dbus
+import json, requests, re, os, functools, dbus, time
 from bs4 import BeautifulSoup
 
 conf = config.PacmanConfig(conf="/etc/pacman.conf")
@@ -187,6 +187,12 @@ class OfficialKernel:
             trans.add_pkg(self.repo)
         else:
             trans.add_pkg(self.getRepoHeader())
+
+        while(True):
+            if not os.path.isfile(handle.lockfile):
+                break
+            if info_func is not None: info_func('Waiting for other package manager to quit...')
+            sleep(2)
 
         trans.prepare()
         trans.commit()
