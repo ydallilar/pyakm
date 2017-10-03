@@ -9,5 +9,5 @@ setup(name='pyakm',
       author_email='yigit.dallilar@gmail.com',
       packages=['pyakm'],
       package_dir={'pyakm': 'src/pyakm'},
-      scripts=['scripts/pyakm-manager.py', 'scripts/pyakm-system-daemon.py',
+      scripts=['scripts/pyakm-manager', 'scripts/pyakm-system-daemon',
      )
