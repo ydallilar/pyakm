@@ -31,5 +31,5 @@ package() {
  install -D -m644 data/ui/manager.ui "$pkgdir"/usr/share/pyakm/ui/manager.ui 
  install -D -m644 data/dbus/com.github.pyakm.system.conf "$pkgdir"/etc/dbus-1/system.d/com.github.pyakm.system.conf
  install -D -m644 data/polkit/com.github.pyakm.policy "$pkgdir"/usr/share/polkit-1/actions/com.github.pyakm.policy
- install -D -m644 data/systemd/pamac-system.service "$pkgdir"/usr/lib/systemd/system/pamac-system.service
+ install -D -m644 data/systemd/pyakm-system.service "$pkgdir"/usr/lib/systemd/system/pyakm-system.service
 }
