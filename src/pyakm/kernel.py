@@ -188,11 +188,15 @@ class OfficialKernel:
         else:
             trans.add_pkg(self.getRepoHeader())
 
+        sys.stdout.write('Test1\n')
+
         while(True):
             if not os.path.isfile(handle.lockfile):
                 break
             if info_func is not None: info_func('Waiting for other package manager to quit...')
             time.sleep(2)
+
+        sys.stdout.write('Test2\n')
 
         trans.prepare()
         trans.commit()
