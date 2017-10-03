@@ -1,0 +1,7 @@
+[Unit]
+Description=Pyakm System Session
+
+[Service]
+Type=dbus
+BusName=com.github.pyakm.system
+ExecStart=/usr/bin/pyakm-system-daemon

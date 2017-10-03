@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=com.github.pyakm.system
+Exec=/usr/bin/pyakm-system-daemon
+User=root
+SystemdService=pyakm-system.service

@@ -9,9 +9,5 @@ setup(name='pyakm',
       author_email='yigit.dallilar@gmail.com',
       packages=['pyakm'],
       package_dir={'pyakm': 'src/pyakm'},
-      scripts=['scripts/pyakm-status', 'scripts/pyakm-install-latest',
-               'scripts/pyakm-remove-kernel',
-               'scripts/pyakm-downgrade-kernel',
-               'scripts/pyakm-select-default',
-               'scripts/pyakm-manager']
+      scripts=['scripts/pyakm-manager.py', 'scripts/pyakm-system-daemon.py',
      )
