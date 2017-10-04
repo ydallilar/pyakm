@@ -181,16 +181,7 @@ class OfficialKernel:
                 handle.progresscb = self._progcb
                 info_func('Upgrading, %s' % (self.header_name))
         
-        info_func("Damn...")
-        #sys.stdout.write('Test1\n')
-        """
-        while(True):
-            if not os.path.isfile(handle.lockfile):
-                break
-            if info_func is not None: info_func('Waiting for other package manager to quit...')
-            time.sleep(2)
-        """
-        #sys.stdout.write('Test2\n')
+        self.check_lockfile(info_func=info_func)
 
         trans = handle.init_transaction()
 
@@ -202,7 +193,7 @@ class OfficialKernel:
         trans.prepare()
         trans.commit()
         trans.release()
-
+            
         self.removeIgnorePkg(opt=opt, info_func=info_func)
         if opt:
             self.getKernelPackage(info_func=info_func)
@@ -247,6 +238,8 @@ class OfficialKernel:
         pkg = handle.load_pkg(cache_dir+ pkg_str % \
                              (name, version))
         
+        self.check_lockfile(info_func=info_func)
+
         trans = handle.init_transaction()
         trans.add_pkg(pkg)
         trans.prepare()
@@ -347,7 +340,9 @@ class OfficialKernel:
                 handle.eventcb = self._eventcb
                 handle.progresscb = self._progcb
                 info_func('Removing, %s' % (self.header_name))
-        
+
+        self.check_lockfile(info_func=info_func)
+
         trans = handle.init_transaction()
 
         if opt:
@@ -369,10 +364,14 @@ class OfficialKernel:
         else:
             self.getHeaderPackage(info_func=info_func)
 
-
-    def setDefault(self):
-        pass
-
+    def check_lockfile(self, info_func=None):
+        
+        while(True):
+            if not os.path.isfile(handle.lockfile):
+                break
+            if info_func is not None: info_func('Waiting for other package manager to quit...')
+            time.sleep(2)
+        
     def _isUptoDate(self):
         if self.local is None:
             return -1
@@ -409,6 +408,7 @@ class OfficialKernel:
     def _progcb(self, target, percent, n, i):
         self.info_func("%s %s %3d%%" % (self.task_name, target, percent) )
 
+'''
 class AURKernel:
     
     def __init__(self, kernel_name):
@@ -450,4 +450,4 @@ class AURKernel:
 
     def setDefault():
         pass
-
+'''

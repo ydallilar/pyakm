@@ -26,9 +26,13 @@
 from pyakm.dbus import Server
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
+import os
  
 if __name__ == '__main__':
 
+    if not os.path.exists('/var/cache/pyakm'):
+        os.makedirs('/var/cache/pyakm/')
+    
     DBusGMainLoop(set_as_default=True)
     dbus_service = Server()
  

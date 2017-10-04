@@ -27,15 +27,13 @@ import pyakm.grub as grub
 
 import dbus, threading
 import dbus.service
-import os, time, sys
+import os, time, sys, shutil
 
 class Server(dbus.service.Object):
  
     def __init__(self):
 
         self.kernels = []
-        #self.update = False
-        #self.msg = "Idle"
         self.cntr = 0 
         bus_name = dbus.service.BusName('com.github.pyakm.system',
                                         bus=dbus.SystemBus())
@@ -45,7 +43,6 @@ class Server(dbus.service.Object):
  
     @dbus.service.signal('com.github.pyakm.system')
     def send_update(self, msg):
-        #print(msg)
         pass
 
     @dbus.service.signal('com.github.pyakm.system')
@@ -117,6 +114,7 @@ class Server(dbus.service.Object):
         self.busy_signal(True)
         if kernel.downgradeKernel(version, info_func=self.send_update):
             self.update_grub_thr()
+            self.clear_cache()
         self.busy_signal(False)
         self.refresh_signal()
 
@@ -138,6 +136,7 @@ class Server(dbus.service.Object):
         self.busy_signal(True)
         kernel.upgradeKernel(info_func=self.send_update)
         self.update_grub_thr()
+        self.clear_cache()
         self.busy_signal(False)
         self.refresh_signal()
 
@@ -262,6 +261,10 @@ class Server(dbus.service.Object):
             self.busy_signal(False)
             self.refresh_signal()
 
+    def clear_cache(self):
+        shutil.rmtree('/var/cache/pyakm/')
+        os.makedirs('/var/cache/pyakm/')
+        
 class ClientManager:
 
     def __init__(self, app):

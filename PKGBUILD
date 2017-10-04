@@ -33,4 +33,8 @@ package() {
  install -D -m644 data/dbus/com.github.pyakm.system.service "$pkgdir"/usr/share/dbus-1/system-services/com.github.pyakm.system.service
  install -D -m644 data/polkit/com.github.pyakm.policy "$pkgdir"/usr/share/polkit-1/actions/com.github.pyakm.policy
  install -D -m644 data/systemd/pyakm-system.service "$pkgdir"/usr/lib/systemd/system/pyakm-system.service
+ install -D -m644 data/dekstop/pyakm.desktop "$pkgdir"/usr/share/applications/pyakm.desktop
+ install -D -m644 data/dekstop/pyakm.desktop "$pkgdir"/usr/share/pixmaps/pyakm.png
+ 
+
 }

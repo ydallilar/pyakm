@@ -82,7 +82,7 @@ class ManagerGui(Gtk.Window):
 
         self.client = ClientManager(self)        
         self.client.init_data(kernels)
-        self.client.init_polkit_agent(os.getppid())
+        self.client.init_polkit_agent(os.getpid())
         
     def on_update_signal(self, msg):
         self.status_bar1.set_label(msg)

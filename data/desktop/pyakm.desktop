@@ -1,0 +1,7 @@
+[Desktop Entry]
+Icon=/usr/share/pixmaps/pyakm.png
+Name=Arch Linux Kernel Manager
+Exec=pyakm-manager
+Terminal=false
+Type=Application
+Categories=System;Settings;
