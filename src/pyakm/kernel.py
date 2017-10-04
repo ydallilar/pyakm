@@ -181,15 +181,16 @@ class OfficialKernel:
                 handle.progresscb = self._progcb
                 info_func('Upgrading, %s' % (self.header_name))
         
-        sys.stdout.write('Test1\n')
-
+        info_func("Damn...")
+        #sys.stdout.write('Test1\n')
+        """
         while(True):
             if not os.path.isfile(handle.lockfile):
                 break
             if info_func is not None: info_func('Waiting for other package manager to quit...')
             time.sleep(2)
-
-        sys.stdout.write('Test2\n')
+        """
+        #sys.stdout.write('Test2\n')
 
         trans = handle.init_transaction()
 

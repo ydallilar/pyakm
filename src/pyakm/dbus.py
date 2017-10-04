@@ -27,7 +27,7 @@ import pyakm.grub as grub
 
 import dbus, threading
 import dbus.service
-import os, time
+import os, time, sys
 
 class Server(dbus.service.Object):
  
@@ -78,7 +78,7 @@ class Server(dbus.service.Object):
         global kernels
         if not any(name == kernel.kernel_name for kernel in self.kernels):
             self.kernels.append(k(name))
-            print("Loading kernel, ", name)
+            sys.stdout.write("Loading kernel, %s\n" % name)
             self.cntr += 1
             return True
         else:
