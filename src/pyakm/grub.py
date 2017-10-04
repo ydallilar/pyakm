@@ -40,6 +40,8 @@ def replace_grub_str(f_str, kernel):
 
 def replace_default_kernel(kernel):
 
+    print("grub : default kernel changed to %s\n" % kernel, flush=True)
+    
     f_str = read_template()
     f_str = replace_grub_str(f_str, kernel)
 
@@ -57,14 +59,22 @@ def disable_default_kernel():
                           '/etc/grub.d/01_pyakm'])
 
 def update_grub():
+
+    print('grub : Updating grub\n', flush=True)
     
     req = subp.Popen(['grub-mkconfig', '-o',
                       '/boot/grub/grub.cfg'],
                      stdout=subp.PIPE, stderr=subp.PIPE,
                      close_fds=True)
 
-    for line in iter(req.stderr.readline, b''):
-        sys.stdout.write(line.decode('utf-8'))
+    f = open(os.devnull, 'w')
+    
+    for line in iter(req.stdout.readline, b''):
+        f.write(line.decode('utf-8'))
 
+    for line in iter(req.stderr.readline, b''):
+        f.write(line.decode('utf-8'))
+
+    f.close()
         
 

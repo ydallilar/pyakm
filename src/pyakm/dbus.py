@@ -56,6 +56,7 @@ class Server(dbus.service.Object):
 
     @dbus.service.method('com.github.pyakm.system')
     def init_polkit_agent(self, ppid):
+        print('dbus : Registering polkit agent with pid [%s]\n' % ppid)
         self.pagent = PolkitAgent(ppid, info_func=self.send_update)
     
     @dbus.service.method('com.github.pyakm.system')
@@ -72,19 +73,19 @@ class Server(dbus.service.Object):
     
     @dbus.service.method('com.github.pyakm.system')
     def load_kernel(self, name):
-        global kernels
         if not any(name == kernel.kernel_name for kernel in self.kernels):
             self.kernels.append(k(name))
-            sys.stdout.write("Loading kernel, %s\n" % name)
+            print("dbus : Loading kernel, %s\n" % name, flush=True)
             self.cntr += 1
             return True
         else:
-            print(name, " is already loaded...")
+            print("!dbus : %s is already loaded..." % name, flush=True)
             return False
 
     @dbus.service.method('com.github.pyakm.system')
     def refresh_kernel(self, name):
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             self.refresh_kernel_thr(name)
@@ -93,12 +94,14 @@ class Server(dbus.service.Object):
     def refresh_kernel_thr(self, name):
         for kernel in self.kernels:
             if name == kernel.kernel_name:
+                print("dbus : Refreshing kernel %s\n" % name, flush=True)
                 kernel.Refresh(info_func=self.send_update)
                 break
 
     @dbus.service.method('com.github.pyakm.system')
     def downgrade_kernel(self, name, version):
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
@@ -110,8 +113,11 @@ class Server(dbus.service.Object):
 
     def downgrade_kernel_thr(self, kernel, version):
         if not self.pagent.check_authorization():
+            print("dbus : Failed to authorize transaction.\n", flush=True)
             return False
         self.busy_signal(True)
+        print("dbus : Downgrading kernel %s to %s.\n" % (kernel.kernel_name, version),
+              flush=True)        
         if kernel.downgradeKernel(version, info_func=self.send_update):
             self.update_grub_thr()
             self.clear_cache()
@@ -121,6 +127,7 @@ class Server(dbus.service.Object):
     @dbus.service.method('com.github.pyakm.system')
     def upgrade_kernel(self, name):
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
@@ -132,8 +139,10 @@ class Server(dbus.service.Object):
 
     def upgrade_kernel_thr(self, kernel):
         if not self.pagent.check_authorization():
+            print("dbus : Failed to authorize transaction.\n", flush=True)
             return False
         self.busy_signal(True)
+        print("dbus : Upgrading kernel %s\n" % kernel.kernel_name, flush=True)
         kernel.upgradeKernel(info_func=self.send_update)
         self.update_grub_thr()
         self.clear_cache()
@@ -142,8 +151,8 @@ class Server(dbus.service.Object):
 
     @dbus.service.method('com.github.pyakm.system')
     def remove_kernel(self, name):
-        print(name)
-        if not any(name == kernel.kernel_name for kernel in self.kernels):
+        if not any(name == kernel.kernel_name for kernel in self.kernels): 
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
@@ -153,14 +162,17 @@ class Server(dbus.service.Object):
                         thr.start()
                         break
                     else:
+                        print("dbus : kernel %s is not installed.\n" % name, flush=True)
                         self.send_update("%s is not installed." % name)
                         return False
             return True
 
     def remove_kernel_thr(self, kernel):
         if not self.pagent.check_authorization():
+            print("dbus : Failed to authorize transaction.\n", flush=True)
             return False
         self.busy_signal(True)
+        print("dbus : Removing kernel %s.\n" % kernel.kernel_name, flush=True)
         kernel.removeKernel(info_func=self.send_update)
         self.update_grub_thr()
         self.busy_signal(False)
@@ -169,12 +181,15 @@ class Server(dbus.service.Object):
     @dbus.service.method('com.github.pyakm.system')
     def add_ignorepkg(self, name):
         if not self.pagent.check_authorization():
+            print("dbus : Failed to authorize transaction.\n", flush=True)
             return False
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
                 if name == kernel.kernel_name:
+                    print("dbus : Adding kernel %s to IgnorePkg.\n" % name, flush=True)
                     kernel.addIgnorePkg()
                     kernel.addIgnorePkg(False)
                     break
@@ -183,12 +198,15 @@ class Server(dbus.service.Object):
     @dbus.service.method('com.github.pyakm.system')
     def remove_ignorepkg(self, name):
         if not self.pagent.check_authorization():
+            print("dbus : Failed to authorize transaction.\n", flush=True)
             return False
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
                 if name == kernel.kernel_name:
+                    print("dbus : Removing kernel %s from IgnorePkg.\n" % name, flush=True)
                     kernel.removeIgnorePkg()
                     kernel.removeIgnorePkg(False)
                     break
@@ -226,11 +244,11 @@ class Server(dbus.service.Object):
         
     @dbus.service.method('com.github.pyakm.system')
     def grub_default_kernel(self, name):
-        self.send_update('bla bla')
         if not self.pagent.check_authorization():
-            return False
-            
+            print("dbus : Failed to authorize transaction.\n", flush=True)
+            return False            
         if not any(name == kernel.kernel_name for kernel in self.kernels):
+            print("dbus : %s kernel is not loaded.\n" % name, flush=True)
             return False
         else:
             for kernel in self.kernels:
@@ -240,6 +258,7 @@ class Server(dbus.service.Object):
                         self.update_grub()
                         break
                     else:
+                        print("dbus : kernel %s is not installed.\n" % name, flush=True)
                         self.send_update("%s is not installed." % name)
                         return False
             return True
@@ -251,17 +270,19 @@ class Server(dbus.service.Object):
 
     def update_grub_thr(self):
         self.send_update("Updating grub...")
-        if not self.pagent.check_authorization():
-            return False
         if self.busy:
             grub.update_grub()
         else:
+            if not self.pagent.check_authorization():
+                print("dbus : Failed to authorize transaction.\n", flush=True)
+                return False
             self.busy_signal(True)
             grub.update_grub()
             self.busy_signal(False)
             self.refresh_signal()
 
     def clear_cache(self):
+        print("dbus : Clearing cache /var/cache/pyakm\n", flush=True)
         shutil.rmtree('/var/cache/pyakm/')
         os.makedirs('/var/cache/pyakm/')
         

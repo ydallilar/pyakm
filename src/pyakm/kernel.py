@@ -23,8 +23,9 @@
 
 import pyalpm as alpm
 from pycman import config
-import json, requests, re, os, functools, dbus, time
+import json, requests, re, os, functools, dbus, time, sys
 from bs4 import BeautifulSoup
+
 
 conf = config.PacmanConfig(conf="/etc/pacman.conf")
 handle = conf.initialize_alpm()
@@ -67,22 +68,20 @@ class OfficialKernel:
 
         if info_func is not None:
             info_func('Checking local database for, ' + self.kernel_name)
-        print('Checking local database for, ', self.kernel_name)
+        print('%s : Checking local database\n' % self.kernel_name, flush=True)
 
         db = handle.get_localdb()
         pkg = db.get_pkg(self.kernel_name)
-        #if pkg != None:
         self.local = pkg
 
     def getHeaderPackage(self, info_func=None):
 
         if info_func is not None:
             info_func('Checking local database for, ' + self.header_name)
-        print('Checking local database for, ', self.header_name)
+        print('%s : Checking local database\n' % self.header_name, flush=True)
 
         db = handle.get_localdb()
         pkg = db.get_pkg(self.header_name)
-        #if pkg != None:
         self.header = pkg
 
 
@@ -90,6 +89,7 @@ class OfficialKernel:
 
         if info_func is not None:
             info_func('Obtain repo package, '+ self.kernel_name)
+        print('%s : Obtaining repo package\n' % self.kernel_name, flush=True)
             
         dbs = handle.get_syncdbs()
         for db in dbs:
@@ -101,6 +101,7 @@ class OfficialKernel:
 
         if info_func is not None:
             info_func('Obtain repo package, ', self.header_name)
+        print('%s : Obtaining repo package\n' % self.header_name, flush=True)
             
         dbs = handle.get_syncdbs()
         for db in dbs:
@@ -112,7 +113,7 @@ class OfficialKernel:
 
         if info_func is not None:
             info_func('Retrieving archive list for, %s' % self.kernel_name)
-        print('Retrieving archive list for, %s' % self.kernel_name)
+        print('%s : Retrieving archive list\n' % self.kernel_name, flush=True)
         
         file_list = []
         vers = []
@@ -136,11 +137,12 @@ class OfficialKernel:
             name = self.kernel_name
         else:
             name = self.header_name
-
+            
         url = archive_url + '/' + name[0] + '/' + name + '/'
-        soup = BeautifulSoup(requests.get(url).text, 'html.parser')
         package = pkg_str % (name, version)
 
+        print('%s : Downloading %s\n' % (name, package), flush=True)
+        
         req = requests.get(url+package, stream=True, timeout=1)
         tot = int(req.headers['Content-length'])
         chunk_sz = 4096
@@ -160,7 +162,6 @@ class OfficialKernel:
 
         f.close()
 
-
     def upgradeKernel(self, opt=True, info_func=None):
         #1 : for kernel
         #0 : for header
@@ -174,12 +175,14 @@ class OfficialKernel:
                 handle.eventcb = self._eventcb
                 handle.progresscb = self._progcb
                 info_func('Upgrading, %s' % (self.kernel_name))
+                print("%s : Upgrading\n" % (self.kernel_name), flush=True)
         else:
             if info_func is not None:
                 handle.dlcb = self._dlcb
                 handle.eventcb = self._eventcb
                 handle.progresscb = self._progcb
                 info_func('Upgrading, %s' % (self.header_name))
+                print("%s : Upgrading\n" % (self.header_name), flush=True)
         
         self.check_lockfile(info_func=info_func)
 
@@ -190,9 +193,7 @@ class OfficialKernel:
         else:
             trans.add_pkg(self.getRepoHeader())
 
-        trans.prepare()
-        trans.commit()
-        trans.release()
+        self.do_transaction(trans)
             
         self.removeIgnorePkg(opt=opt, info_func=info_func)
         if opt:
@@ -211,7 +212,7 @@ class OfficialKernel:
         self.task_name = 'Installing ' 
         
         if not any(version == item for item in self.vers):
-            print(version, 'does not match with the any packages.')
+            print('%s : unknown version (%s)\n' % (self.kernel_name, version), flush=True)
             return False
 
         self.info_func = info_func
@@ -228,12 +229,9 @@ class OfficialKernel:
             name = self.header_name
 
         if info_func is not None: info_func('Downgrading, %s' % (name))
-
-        try: 
-            self.downloadKernel(version, opt, info_func=info_func)
-        except:
-            self.info_func('Failed to connect to %s' % s)
-            return False
+        print('%s : Downgrading.\n' % (name), flush=True)
+        
+        self.downloadKernel(version, opt, info_func=info_func)
 
         pkg = handle.load_pkg(cache_dir+ pkg_str % \
                              (name, version))
@@ -242,9 +240,8 @@ class OfficialKernel:
 
         trans = handle.init_transaction()
         trans.add_pkg(pkg)
-        trans.prepare()
-        trans.commit()
-        trans.release()
+
+        self.do_transaction(trans)
 
         self.addIgnorePkg(opt=opt, info_func=info_func)
         if opt:
@@ -273,7 +270,7 @@ class OfficialKernel:
                 return False
 
         if info_func is not None: info_func('Adding %s to IgnorePkg' % name)
-            
+        print('%s : Adding to IgnorePkg\n' % name, flush=True)
         
         lines = open('/etc/pacman.conf', 'r').readlines()
         
@@ -300,7 +297,7 @@ class OfficialKernel:
         else:
             name = self.header_name
 
-        print('Unignore package, ', name)
+        print('%s : Removing IgnorePkg\n' % name, flush=True)
         
         for ignored in handle.ignorepkgs:
             if ignored == name:
@@ -334,12 +331,14 @@ class OfficialKernel:
                 handle.eventcb = self._eventcb
                 handle.progresscb = self._progcb
                 info_func('Removing, %s' % (self.kernel_name))
+                print("%s : Removing\n" % self.kernel_name, flush=True)
         else:
             if info_func is not None:
                 handle.dlcb = self._dlcb
                 handle.eventcb = self._eventcb
                 handle.progresscb = self._progcb
                 info_func('Removing, %s' % (self.header_name))
+                print("%s : Removing\n" % self.header_name, flush=True)
 
         self.check_lockfile(info_func=info_func)
 
@@ -352,9 +351,7 @@ class OfficialKernel:
         else:
             trans.remove_pkg(self.header)
 
-        trans.prepare()
-        trans.commit()
-        trans.release()
+        self.do_transaction(trans)
 
         self.removeIgnorePkg(opt=opt, info_func=info_func)
         if opt:
@@ -365,12 +362,31 @@ class OfficialKernel:
             self.getHeaderPackage(info_func=info_func)
 
     def check_lockfile(self, info_func=None):
-        
+
+        cnt = 1
         while(True):
             if not os.path.isfile(handle.lockfile):
                 break
             if info_func is not None: info_func('Waiting for other package manager to quit...')
-            time.sleep(2)
+            print('%s : Waiting for other package manager to quit. Attempt [%02d]\n' % \
+                  (self.kernel_name, cnt), flush=True)
+            time.sleep(5)
+            cnt += 1
+
+    def do_transaction(self, transaction):
+
+        print("%s : Start transaction\n" % self.kernel_name, flush=True)
+        try:
+            transaction.prepare()
+            transaction.commit()
+            transaction.release()
+            print("%s : Transcation finished\n" % self.kernel_name, flush=True)
+            return True
+        except:
+            transaction.release()
+            print("%s : Failed to complete transaction\n" % self.kernel_name, flush=True)
+            return False
+        
         
     def _isUptoDate(self):
         if self.local is None:
@@ -402,8 +418,6 @@ class OfficialKernel:
 
     def _eventcb(self, *args):
         pass
-        #print(args)
-        #self.info_func("%s" % args[1])
 
     def _progcb(self, target, percent, n, i):
         self.info_func("%s %s %3d%%" % (self.task_name, target, percent) )
