@@ -6,7 +6,7 @@ Binaries include:
 * pyakm-system-daemon
 * pyakm-manager
 
-pyakm-system-daemon will be started by systemd upon the execution pyakm-manager. That means you can see the logs via `journalctl -u pyakm-system -b 0 | grep pyakm > log.txt` or something similar. Send me the logs this way.
+pyakm-system-daemon will be started by systemd upon the execution pyakm-manager. That means you can see the logs via `journalctl -u pyakm-system -b 0 | grep pyakm > log.txt` or something similar. Send me the logs this way. This software comes with a dbus service which you can use an interface for your scripts etc.
 
 There are not many decent pyalpm, python-dbus, polkit examples around. So, I hope this will also be useful if you are searching for an answer on these topics.
 
@@ -19,4 +19,4 @@ GUI can be simplified to four tasks:
 - Select         : Installs kernel with selected version. Adds the kernel and the header package to `IgnorePkg` in `/etc/pacman.conf`
 - Upgrade        : Installs the latest version of the selected kernel. Removes the kernel from `IgnorePkg`
 
-For some reason, if gui stuck or frozen. You probably need to restart the `pyakm-system` service as well via `sudo systemctl restart pyakm-system`. And send me the logs of course. 
+For some reason, if gui stuck or frozen. You probably need to restart the `pyakm-system` service via `sudo systemctl restart pyakm-system`. And send me the logs of course. 
