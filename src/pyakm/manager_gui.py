@@ -74,6 +74,9 @@ class ManagerGui(Gtk.Window):
         self.menu_kernel = self.builder.get_object('menu_kernel')
         self.menu_kernel.connect("row_selected", self.menuSelectAction)
 
+        self.manage_view = self.builder.get_object("manage_view")
+        self.status_view = self.builder.get_object("status_view")
+
         self.window.connect("delete-event", Gtk.main_quit)
         self.window.show_all()
 
@@ -92,15 +95,22 @@ class ManagerGui(Gtk.Window):
         if busy:
             self.spinner1.start()
             self.spinner2.start()
-            self.button_refresh.set_sensitive(False)
-            self.stack1.set_sensitive(False)
+            self.menu_kernel.set_sensitive(False)
+            self.button_remove.set_sensitive(False)
+            self.button_upgrade.set_sensitive(False)
+            self.button_select.set_sensitive(False)
+            self.button_set_default.set_sensitive(False)
         else:
             self.spinner1.stop()
             self.spinner2.stop()
-            self.button_refresh.set_sensitive(True) 
-            self.stack1.set_sensitive(True)
-            self.status_bar1.set_label("")
-            self.status_bar2.set_label("")
+            self.menu_kernel.set_sensitive(True)
+            self.button_remove.set_sensitive(True)
+            self.button_upgrade.set_sensitive(True)
+            self.button_select.set_sensitive(True)
+            self.button_set_default.set_sensitive(True)
+            kernel, version = self.client.get_current_kernel()
+            self.status_bar1.set_label("Running : %s %s" % (kernel, version))
+            self.status_bar2.set_label("Running : %s %s" % (kernel, version))
             
     def refreshWindow(self):
         self.createStatusView()
@@ -108,7 +118,6 @@ class ManagerGui(Gtk.Window):
         self.createManageView()
         self.loadManageView(self.selected_menu_entry)
         self.window_loaded = True
-
 
     def loadKernels(self):
         for kernel in kernels:
@@ -149,13 +158,12 @@ class ManagerGui(Gtk.Window):
         self.client.downgrade_kernel(self.menu_view_entry[0], self.menu_view_entry[1].strip())
 
     def refreshAction(self, widget):
-        self.refreshWindow()
+        self.client.init_data(kernels)
 
     def createStatusView(self):
 
         if not self.window_loaded:
             renderer = Gtk.CellRendererText()
-            self.status_view = self.builder.get_object("status_view")
             column = Gtk.TreeViewColumn("Kernel", renderer, text=0)
             column.set_expand(True)
             self.status_view.append_column(column)
@@ -190,7 +198,6 @@ class ManagerGui(Gtk.Window):
             
         if not self.window_loaded:
             renderer = Gtk.CellRendererText()
-            self.manage_view = self.builder.get_object("manage_view")
             column = Gtk.TreeViewColumn("Kernel", renderer, text=0)
             column.set_expand(True)
             self.manage_view.append_column(column)

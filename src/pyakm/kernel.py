@@ -23,7 +23,7 @@
 
 import pyalpm as alpm
 from pycman import config
-import json, requests, re, os, functools, dbus, time, sys
+import json, requests, re, os, functools, dbus, time, sys, signal
 from bs4 import BeautifulSoup
 
 
@@ -40,6 +40,8 @@ pkg_str = '%s-%s-x86_64.pkg.tar.xz'
 
 cache_dir = '/var/cache/pyakm/'
 
+class NetworkError(Exception):
+    pass
 
 class OfficialKernel:
 
@@ -94,8 +96,16 @@ class OfficialKernel:
         dbs = handle.get_syncdbs()
         for db in dbs:
             if db.name == official_dict[self.kernel_name]:
-                self.repo = db.get_pkg(self.kernel_name)
-                break
+                while(True):
+                    try:
+                        self.repo = db.get_pkg(self.kernel_name)
+                        break
+                    except:
+                        info_func('%s : Failed retreive package %s. Retrying.' % \
+                              self.kernel_name, self.kernel_name)
+                        print('%s : Failed retreive package %s. Retrying.\n' % \
+                              self.kernel_name, self.kernel_name, flush=True)
+                        time.sleep(5)
 
     def getRepoHeader(self, opt=True, info_func=None):
 
@@ -106,8 +116,16 @@ class OfficialKernel:
         dbs = handle.get_syncdbs()
         for db in dbs:
             if db.name == official_dict[self.kernel_name]:
-                return db.get_pkg(self.header_name)
-                
+                while(True):
+                    try:
+                        return db.get_pkg(self.header_name)
+                    except:
+                        info_func('Failed retreive package %s. Retrying.' % \
+                              self.kernel_name, self.header_name)
+                        print('%s : Failed retreive package %s. Retrying.\n' % \
+                              self.kernel_name, self.header_name, flush=True)
+                        time.sleep(5)
+
             
     def getArchiveList(self, info_func=None):
 
@@ -118,17 +136,30 @@ class OfficialKernel:
         file_list = []
         vers = []
         url = archive_url + '/' + self.kernel_name[0] + '/' + self.kernel_name + '/'
-        soup = BeautifulSoup(requests.get(url).text, 'html.parser')
-        for a in soup.find_all('a'):
-            if (a['href'].split('.')[-1] == 'xz') & (a['href'].find('x86_64') > -1):
-                file_list.append(a['href'])
 
-        for package in file_list:
-            vers.append(self._getVersFromFilename(package))
+        while(True):
+            
+            try:
+                req = requests.get(url, timeout=6)
+                soup = BeautifulSoup(req.text, 'html.parser')
+                for a in soup.find_all('a'):
+                    if (a['href'].split('.')[-1] == 'xz') & (a['href'].find('x86_64') > -1):
+                        file_list.append(a['href'])
 
-        self.vers = sorted(vers,
-                           key=functools.cmp_to_key(alpm.vercmp), reverse=True)
+                for package in file_list:
+                    vers.append(self._getVersFromFilename(package))
 
+                self.vers = sorted(vers,
+                                   key=functools.cmp_to_key(alpm.vercmp), reverse=True)
+                break
+            except:
+                info_func('Failed retreive archive list. Retrying.')
+                print('%s : Failed retreive archive list. Retrying.\n' % \
+                      self.kernel_name, flush=True)
+                time.sleep(5)
+                continue
+
+                
     def downloadKernel(self, version, opt=True, info_func=None):
         #1 : for kernel
         #0 : for header
@@ -143,25 +174,48 @@ class OfficialKernel:
 
         print('%s : Downloading %s\n' % (name, package), flush=True)
         
-        req = requests.get(url+package, stream=True, timeout=1)
-        tot = int(req.headers['Content-length'])
-        chunk_sz = 4096
-        f = open(cache_dir+package, 'wb')
+        attempt = 1
+        while(True):
             
-        if info_func is not None: 
-            cnt = 0
-            for data in req.iter_content(chunk_size=chunk_sz):
-                cnt += 1
-                info_func("Downloading %s %3d%%" % (package,int(cnt*chunk_sz/tot*100)))
-                f.write(data)
-        else:
-            cnt = 0
-            for data in req.iter_content(chunk_size=chunk_sz):
-                cnt += 1
-                f.write(data)
+            try:
+                req = requests.get(url+package, stream=True, timeout=6)
+                print('%s : Connected to %s\n' % (name, archive_url), flush=True)
+            except:
+                print('%s : Failed to connect %s. Attempt [%02d]\n' % (name, archive_url, attempt),
+                      flush=True)
+                self.info_func('Failed to connect to archive server. Attempt [%02d]' % \
+                               (attempt))
+                attempt += 1
+                time.sleep(5)
+                continue
 
-        f.close()
+            try:
+                tot = int(req.headers['Content-length'])
+                chunk_sz = 4096
+                f = open(cache_dir+package, 'wb')
+            
+                if info_func is not None: 
+                    chnks = 0
+                    for data in req.iter_content(chunk_size=chunk_sz):
+                        chnks += 1
+                        info_func("Downloading %s %3d%%" % (package,int(chnks*chunk_sz/tot*100)))
+                        f.write(data)
+                else:
+                    for data in req.iter_content(chunk_size=chunk_sz):
+                        f.write(data)
 
+                f.close()
+
+                req.close()
+                break
+            
+            except:
+                self.info_func('Failed to finish download. Retrying')
+                print('%s : Failed to finish download.\n' % (name), flush=True)
+                print('%s : Reconnecting to %s in 5 secs.\n' % (name, archive_url), flush=True)
+                time.sleep(5)
+                continue
+                
     def upgradeKernel(self, opt=True, info_func=None):
         #1 : for kernel
         #0 : for header
@@ -230,11 +284,14 @@ class OfficialKernel:
 
         if info_func is not None: info_func('Downgrading, %s' % (name))
         print('%s : Downgrading.\n' % (name), flush=True)
-        
-        self.downloadKernel(version, opt, info_func=info_func)
 
-        pkg = handle.load_pkg(cache_dir+ pkg_str % \
-                             (name, version))
+        if not os.path.isfile(handle.cachedirs[0] + pkg_str % (name, version)):
+            self.downloadKernel(version, opt, info_func=info_func)
+            pkg = handle.load_pkg(cache_dir + pkg_str % \
+                                  (name, version))
+        else:
+            print("%s : File found in %s.\n" % (name, handle.cachedirs[0]), flush=True)
+            pkg = handle.load_pkg(handle.cachedirs[0] + pkg_str % (name, version))
         
         self.check_lockfile(info_func=info_func)
 
@@ -376,17 +433,19 @@ class OfficialKernel:
     def do_transaction(self, transaction):
 
         print("%s : Start transaction\n" % self.kernel_name, flush=True)
-        try:
-            transaction.prepare()
-            transaction.commit()
-            transaction.release()
-            print("%s : Transcation finished\n" % self.kernel_name, flush=True)
-            return True
-        except:
-            transaction.release()
-            print("%s : Failed to complete transaction\n" % self.kernel_name, flush=True)
-            return False
+        while(True):
+            try:
+                transaction.prepare()
+                transaction.commit()
+                transaction.release()
+                print("%s : Transcation finished\n" % self.kernel_name, flush=True)
+                return True
+            except:
+                transaction.release()
+                print("%s : Failed to complete transaction\n" % self.kernel_name, flush=True)
         
+    def raiseNetworkError(self):
+        raise networkError()
         
     def _isUptoDate(self):
         if self.local is None:
@@ -421,6 +480,7 @@ class OfficialKernel:
 
     def _progcb(self, target, percent, n, i):
         self.info_func("%s %s %3d%%" % (self.task_name, target, percent) )
+
 
 '''
 class AURKernel:

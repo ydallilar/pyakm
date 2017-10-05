@@ -55,6 +55,15 @@ class Server(dbus.service.Object):
         pass
 
     @dbus.service.method('com.github.pyakm.system')
+    def get_current_kernel(self):
+        ckernel = os.popen('uname -r').read()[:-1]
+        version = '-'.join(ckernel.split('-')[:-1])
+        prefix = '-' + ckernel.split('-')[-1]
+        kernel = 'linux' + (prefix if prefix != 'ARCH' else '')
+        print("dbus : Running %s" % (' '.join([kernel, version])), flush=True)
+        return [kernel, version]
+        
+    @dbus.service.method('com.github.pyakm.system')
     def init_polkit_agent(self, ppid):
         print('dbus : Registering polkit agent with pid [%s]\n' % ppid)
         self.pagent = PolkitAgent(ppid, info_func=self.send_update)
@@ -309,6 +318,7 @@ class ClientManager:
         self.grub_default_kernel = self.system.get_dbus_method('grub_default_kernel', self.iface)
         self.init_data = self.system.get_dbus_method('init_data', self.iface)
         self.init_polkit_agent = self.system.get_dbus_method('init_polkit_agent', self.iface)
+        self.get_current_kernel = self.system.get_dbus_method('get_current_kernel', self.iface)
 
         self.bus.add_signal_receiver(app.on_update_signal, signal_name='send_update')
         self.bus.add_signal_receiver(app.on_busy_signal, signal_name='busy_signal')
