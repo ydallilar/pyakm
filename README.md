@@ -23,3 +23,8 @@ For some reason, if gui stuck or frozen. You probably need to restart the `pyakm
 
 As is, this software is enough for my purposes so I will probably fix some bugs as I go along and leave it there. If you would like to see more features, let me know.
 
+# TODO List
+
+  - Bind some output to the terminal or a window
+  - grub fill fail if many OSs exist. Add a config file or settings gui for a switch I guess.
+
