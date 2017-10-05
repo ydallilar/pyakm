@@ -22,6 +22,8 @@
 #  along with pyakm; If not, see <http://www.gnu.org/licenses/>.
 
 import sys, os
+import gi
+gi.require_version('Polkit', '1.0')
 from gi.repository import GObject, Gio, Polkit
 
 

@@ -23,7 +23,7 @@
 
 import pyalpm as alpm
 from pycman import config
-import json, requests, re, os, functools, dbus, time, sys, signal
+import requests, re, os, functools, dbus, time, sys
 from bs4 import BeautifulSoup
 
 
@@ -39,9 +39,6 @@ aur_url = "https://aur.archlinux.org/rpc/?v=5&"
 pkg_str = '%s-%s-x86_64.pkg.tar.xz'
 
 cache_dir = '/var/cache/pyakm/'
-
-class NetworkError(Exception):
-    pass
 
 class OfficialKernel:
 

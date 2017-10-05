@@ -3,8 +3,8 @@
 from distutils.core import setup
 
 setup(name='pyakm',
-      version='0.1',
-      description='Antergos Kernel Manager in Python',
+      version='0.0.2',
+      description='Simple GUI for managing Arch linux kernels (pre-release)',
       author='Yigit Dallilar',
       author_email='yigit.dallilar@gmail.com',
       packages=['pyakm'],
