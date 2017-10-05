@@ -1,4 +1,4 @@
-# pyakm (or Arch Linux Kernel Manager)
+# pyakm (or Arch Linux Kernel Manager 0.0.2)
 
 Simple kernel manager for arch linux basically a gtk application to manage official kernels.
 
@@ -16,5 +16,7 @@ GUI can be simplified to four tasks:
 - Remove         : Removes selected kernel and updates grub. 
 - Set as Default : Adds an entry to your grub menu for the selected kernel and updates grub.
   - If you want to remove this entry simply delete `/etc/grub.d/01_pyakm` and update grub.
-- Select         : Installs kernel with selected version. Adds the kernel and the header package to `IgnorePkg` in /etc/pacman.conf
+- Select         : Installs kernel with selected version. Adds the kernel and the header package to `IgnorePkg` in `/etc/pacman.conf`
 - Upgrade        : Installs the latest version of the selected kernel. Removes the kernel from `IgnorePkg`
+
+For some reason, if gui stuck or frozen. You probably need to restart the `pyakm-system` service as well via `sudo systemctl restart pyakm-system`. And send me the logs of course. 
