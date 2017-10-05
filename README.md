@@ -19,4 +19,7 @@ GUI can be simplified to four tasks:
 - Select         : Installs kernel with selected version. Adds the kernel and the header package to `IgnorePkg` in `/etc/pacman.conf`
 - Upgrade        : Installs the latest version of the selected kernel. Removes the kernel from `IgnorePkg`
 
-For some reason, if gui stuck or frozen. You probably need to restart the `pyakm-system` service via `sudo systemctl restart pyakm-system`. And send me the logs of course. 
+For some reason, if gui stuck or frozen. You probably need to restart the `pyakm-system` service via `sudo systemctl restart pyakm-system`. And send me the logs of course.
+
+As is, this software is enough for my purposes so I will probably fix some bugs as I go along and leave it there. If you would like to see more features, let me know.
+
