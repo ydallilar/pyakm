@@ -1,4 +1,4 @@
-#pyakm
+# pyakm
 
 Simple kernel manager for arch linux.
 
