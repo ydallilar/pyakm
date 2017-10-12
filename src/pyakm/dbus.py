@@ -59,7 +59,7 @@ class Server(dbus.service.Object):
         ckernel = os.popen('uname -r').read()[:-1]
         version = '-'.join(ckernel.split('-')[:-1])
         prefix = ckernel.split('-')[-1]
-        kernel = 'linux' + (prefix if prefix != 'ARCH' else '')
+        kernel = 'linux' + ('-' + prefix if prefix != 'ARCH' else '')
         print("dbus : Running %s" % (' '.join([kernel, version])), flush=True)
         return [kernel, version]
         

@@ -27,6 +27,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GLib
 from dbus.mainloop.glib import DBusGMainLoop
 from pyakm.dbus import ClientManager
+from pyakm.config import ConfigGui
 
 
 kernels = ['linux', 'linux-lts', 'linux-zen', 'linux-hardened']
@@ -74,6 +75,9 @@ class ManagerGui(Gtk.Window):
         self.menu_kernel = self.builder.get_object('menu_kernel')
         self.menu_kernel.connect("row_selected", self.menuSelectAction)
 
+        self.popover_preferences_menu = self.builder.get_object('popover_preferences_menu')
+        self.popover_preferences_menu.connect("clicked", self.prefMenuAction)
+        
         self.manage_view = self.builder.get_object("manage_view")
         self.status_view = self.builder.get_object("status_view")
 
@@ -145,6 +149,10 @@ class ManagerGui(Gtk.Window):
         print('Adding to grub menu,', self.status_view_entry[0])
         self.client.grub_default_kernel(self.status_view_entry[0])
 
+    def prefMenuAction(self, widget):
+        configGui = ConfigGui()
+        configGui.window.run()
+        
     def upgradeAction(self, widget):
         print('upgradeAction,', self.selected_menu_entry)
         self.client.upgrade_kernel(self.selected_menu_entry)

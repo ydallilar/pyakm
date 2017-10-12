@@ -129,7 +129,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="apply_grubScriptCmd">
+                  <object class="GtkButton">
                     <property name="label" translatable="yes">Apply</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
@@ -146,7 +146,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="text_grubScriptCmd">
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
