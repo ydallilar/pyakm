@@ -21,8 +21,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with pyakm; If not, see <http://www.gnu.org/licenses/>.
 
-import pyalpm as alpm
-from pycman import config
+import pyakm.pyalpm as alpm
+from pyakm.pycman import config
 import requests, re, os, functools, dbus, time, sys
 from bs4 import BeautifulSoup
 
@@ -473,7 +473,7 @@ class OfficialKernel:
         self.info_func("Downloading %s %3d%%" % (f_name, int(down/tot*100)))
 
     def _eventcb(self, *args):
-        pass
+        print('Event: ', args, flush=True)
 
     def _progcb(self, target, percent, n, i):
         self.info_func("%s %s %3d%%" % (self.task_name, target, percent) )

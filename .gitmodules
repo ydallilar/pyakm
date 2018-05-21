@@ -1,0 +1,3 @@
+[submodule "pyalpm"]
+	path = pyalpm
+	url = git@github.com:pssncp142/pyalpm.git
