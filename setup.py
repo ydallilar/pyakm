@@ -42,8 +42,8 @@ setup(name='pyakm',
     description='Simple GUI for managing Arch linux kernels (pre-release)',
     author='Yigit Dallilar',
     author_email='yigit.dallilar@gmail.com',
-    packages=['pyakm', 'pyakm.pycman'],
-    package_dir={'pyakm': 'src/pyakm', 'pyakm.pycman' : 'pyalpm/pycman'},
+    packages=['pyakm'],
+    package_dir={'pyakm': 'src/pyakm'},
     ext_modules = [alpm],
     scripts=['scripts/pyakm-manager', 'scripts/pyakm-system-daemon']
 )

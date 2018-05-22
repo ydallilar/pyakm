@@ -22,7 +22,7 @@
 #  along with pyakm; If not, see <http://www.gnu.org/licenses/>.
 
 import pyakm.pyalpm as alpm
-from pyakm.pycman import config
+import pyakm.alpminit as config
 import requests, re, os, functools, dbus, time, sys
 from bs4 import BeautifulSoup
 
@@ -31,7 +31,7 @@ conf = config.PacmanConfig(conf="/etc/pacman.conf")
 handle = conf.initialize_alpm()
 
 official_dict = {'linux':'core', 'linux-lts':'core',
-                 'linux-zen':'extra', 'linux-hardened':'community'}
+                 'linux-zen':'extra', 'linux-hardened':'extra'}
 
 archive_url = "https://archive.archlinux.org/packages/"
 aur_url = "https://aur.archlinux.org/rpc/?v=5&"
