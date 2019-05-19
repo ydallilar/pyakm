@@ -28,3 +28,4 @@ As is, this software is enough for my purposes so I will probably fix some bugs 
   - Bind some output to the terminal or a window
   - grub fill fail if many OSs exist. Add a config file or settings gui for a switch I guess.
 
+**I am not working in this project anymore because I am busy with other things.**
