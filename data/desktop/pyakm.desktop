@@ -1,5 +1,5 @@
 [Desktop Entry]
-Icon=/usr/share/pixmaps/pyakm.png
+Icon=pyakm
 Name=Arch Linux Kernel Manager
 Exec=pyakm-manager
 Terminal=false
